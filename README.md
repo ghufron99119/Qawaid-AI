@@ -39,7 +39,7 @@ Proyek ini dibangun menggunakan arsitektur *Full-Stack* berkinerja tinggi:
 - **Desain UI:** [Tailwind CSS](https://tailwindcss.com/) dengan palet warna Emerald dan Slate yang menenangkan bergaya Islami-modern.
 - **Ikonografi:** [Lucide React](https://lucide.dev/)
 - **Manajemen Basis Data:** [Prisma ORM](https://www.prisma.io/)
-- **Database Utama:** SQLite (Terkonfigurasi ringan untuk tahap MVP, siap migrasi ke MySQL/PostgreSQL).
+- **Database Utama:** PostgreSQL.
 - **Sistem Keamanan/Autentikasi:** [NextAuth.js (v4)](https://next-auth.js.org/)
 - **Kecerdasan Buatan:** Google Gemini API 
 
@@ -76,8 +76,8 @@ Aplikasi memerlukan variabel lingkungan (`Environment Variables`) untuk mengelol
 Buat file bernama `.env` di root/pangkal direktori aplikasi, lalu isi dengan konfigurasi berikut:
 
 ```env
-# Koneksi Prisma Database (Menggunakan SQLite untuk uji coba lokal)
-DATABASE_URL="file:./dev.db"
+# Koneksi Prisma Database (Ganti dengan koneksi PostgreSQL Anda)
+DATABASE_URL="postgresql://user:password@localhost:5432/qawaidai"
 
 # Next Auth Config (Ganti NEXTAUTH_SECRET dengan string rahasia buatan Anda sendiri)
 NEXTAUTH_SECRET="some_strong_secret_for_development"
@@ -88,7 +88,7 @@ LLM_API_KEY="masukkan_api_key_gemini_anda_disini"
 ```
 
 ### 4. Setup Database
-Gunakan `Prisma` untuk membuat file SQLite lokal dan menyinkronkan kerangka (*schema*) tabel ke dalam database:
+Gunakan `Prisma` untuk menyinkronkan kerangka (*schema*) tabel ke dalam database PostgreSQL Anda:
 ```bash
 npx prisma db push
 npx prisma generate
