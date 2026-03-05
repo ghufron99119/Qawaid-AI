@@ -205,18 +205,6 @@ function analyzeWithFallback(text: string): Promise<Analysis> {
 ### Implementasi Detail
 
 #### 1. Environment Variables
-Tambahkan di `.env.local`:
-```env
-# Gemini
-GEMINI_API_KEY=your key
-
-# OpenRouter (jika pakai)
-OPENROUTER_API_KEY=your key
-OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
-
-# Groq
-GROQ_API_KEY=your key
-GROQ_BASE_URL=https://api.groq.com/openai/v1
 ```
 
 #### 2. Struktur Provider (lib/ai/providers/gemini.ts)
