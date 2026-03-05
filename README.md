@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# قواعد AI (Qawaid AI) 
+> **Intelligent Arabic Grammar Companion**
 
-## Getting Started
+Qawaid AI adalah platform edukasi interaktif berbasis kecerdasan buatan (AI) yang dirancang khusus untuk mempermudah pembelajaran tata bahasa Arab (Nahwu dan Sharaf). Aplikasi ini membantu pengguna dalam menganalisis struktur kalimat, mengidentifikasi jenis kata, menyimpan catatan pembelajaran, serta melatih kemampuan melalui kuis interaktif secara otomatis.
 
-First, run the development server:
+---
 
+## 🚀 Fitur Utama
+
+1. **Autentikasi Pengguna Aman**
+   - Sistem Login dan Registrasi menggunakan `NextAuth.js`.
+   - Menggunakan hashing `bcryptjs` untuk perlindungan password.
+
+2. **Analisis Teks Arab Cerdas (I'rab Analysis) - _Dalam Pengembangan_**
+   - Mendukung input teks bahasa Arab (RTL support).
+   - Terintegrasi dengan **Google Gemini API** / LLM untuk mengurai kalimat (I'rab).
+   - Sorotan otomatis pada jenis kata: *Fi'il* (Kata Kerja), *Isim* (Kata Benda), dan *Harf* (Partikel).
+
+3. **Manajemen Catatan (Smart Dictionary)**
+   - Simpan teks Arab yang telah dianalisis secara pribadi.
+   - Tambahkan dan kelola komentar atau catatan pribadi untuk referensi studi di masa mendatang.
+
+4. **Kuis Interaktif (Interactive Exercises)**
+   - Kuis Grammar (Nahwu/Sharaf) berbentuk pilihan ganda yang dihasilkan langsung oleh AI secara dinamis berdasarkan materi.
+   - Pelacakan skor otomatis untuk mengevaluasi pemahaman pengguna.
+
+5. **Dashboard Progres Pengguna**
+   - Rekap jumlah kalimat yang dianalisis.
+   - Rata-rata nilai kuis.
+   - Riwayat pembelajaran dan statistik yang divisualisasikan dengan elegan.
+
+---
+
+## 🛠 Teknologi yang Digunakan
+
+Proyek ini dibangun menggunakan arsitektur *Full-Stack* berkinerja tinggi:
+
+- **Frontend & Backend (Framework):** [Next.js 14+ (App Router)](https://nextjs.org/)
+- **Desain UI:** [Tailwind CSS](https://tailwindcss.com/) dengan palet warna Emerald dan Slate yang menenangkan bergaya Islami-modern.
+- **Ikonografi:** [Lucide React](https://lucide.dev/)
+- **Manajemen Basis Data:** [Prisma ORM](https://www.prisma.io/)
+- **Database Utama:** SQLite (Terkonfigurasi ringan untuk tahap MVP, siap migrasi ke MySQL/PostgreSQL).
+- **Sistem Keamanan/Autentikasi:** [NextAuth.js (v4)](https://next-auth.js.org/)
+- **Kecerdasan Buatan:** Google Gemini API 
+
+---
+
+## ⚙️ Persyaratan Sistem
+
+Sebelum menjalankan proyek ini secara lokal, pastikan Anda telah memasang:
+- **Node.js** (Versi `v18.x` atau di atasnya)
+- **NPM** atau **Yarn**
+
+---
+
+## 💻 Panduan Instalasi (Local Development)
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan **Qawaid AI** di mesin lokal Anda:
+
+### 1. Kloning Repositori
+Clone proyek ini ke dalam folder lokal Anda dan masuk ke direktori proyek.
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Pastikan Anda menggunakan terminal / command prompt
+git clone <url-repository>
+cd QawaidAI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Instalasi Dependensi
+Instal seluruh *library* dan dependensi yang dibutuhkan proyek:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Konfigurasi Environment Variables
+Aplikasi memerlukan variabel lingkungan (`Environment Variables`) untuk mengelola rahasia dan koneksi Database. 
+Buat file bernama `.env` di root/pangkal direktori aplikasi, lalu isi dengan konfigurasi berikut:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Koneksi Prisma Database (Menggunakan SQLite untuk uji coba lokal)
+DATABASE_URL="file:./dev.db"
 
-## Learn More
+# Next Auth Config (Ganti NEXTAUTH_SECRET dengan string rahasia buatan Anda sendiri)
+NEXTAUTH_SECRET="some_strong_secret_for_development"
+NEXTAUTH_URL="http://localhost:3000"
 
-To learn more about Next.js, take a look at the following resources:
+# Kunci API Google Gemini untuk fungsionalitas Analisis Teks & Kuis
+LLM_API_KEY="masukkan_api_key_gemini_anda_disini"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Setup Database
+Gunakan `Prisma` untuk membuat file SQLite lokal dan menyinkronkan kerangka (*schema*) tabel ke dalam database:
+```bash
+npx prisma db push
+npx prisma generate
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Jalankan Development Server
+Mulai server Node.js lokal agar Anda dapat membuka aplikasinya:
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+Buka peramban (*browser*) Anda lalu navigasikan ke **[http://localhost:3000](http://localhost:3000)**. 
+Aplikasi akan langsung menampilkan *Landing Page*.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🗃️ Skema Basis Data
+
+Aplikasi ini menggunakan tiga entitas data utama:
+- `User`: Menyimpan identitas pengguna (`id`, `name`, `email`, `password_hash`).
+- `Text`: Menyimpan riwayat teks Arab yang diuji/dianalisis. Ditautkan ke model *User* lewat parameter `userId`. Menyimpan balasan JSON dari LLM API.
+- `Quiz`: Menyimpan rekap kuis.
+
+---
+
+## 🤝 Alur / Workflow Kerja Aplikasi
+1. **Pendaftaran:** Pengguna membuat akun di halaman `/register`.
+2. **Dashboard:** Setelah terotentikasi, pengguna dialihkan ke halaman pelacakan progres `/dashboard`.
+3. **Analisa Teks:** Teks Arab dimasukkan → API Route Next.js mengelola `Prompt` → LLM Gemini mengembalikan format JSON (I'rab detail) → Frontend menampilkan highlight warna.
+4. **Kuis:** Modul kuis membaca teks lama pengguna dari database → LLM mengubahnya menjadi set soal pilihan ganda menantang.
+
+---
+
+> Dikerjakan menggunakan hati untuk pelestarian tata bahasa Al-Qur'an dan kemudahan akses mahasiswa/pelajar bahasa Arab. 
+> © 2026 Qawaid AI Team.
