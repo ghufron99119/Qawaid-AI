@@ -54,52 +54,52 @@ export default function Register() {
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center">
-            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100 dark:border-slate-800">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl justify-center font-arabic font-bold text-emerald-800 mb-2">تسجيل حساب</h1>
-                    <h2 className="text-xl font-semibold text-gray-800">Create an Account</h2>
-                    <p className="text-gray-500 text-sm mt-2">Join Qawaid AI today</p>
+                    <h1 className="text-3xl justify-center font-arabic font-bold text-emerald-800 dark:text-emerald-500 mb-2">تسجيل حساب</h1>
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Create an Account</h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">Join Qawaid AI today</p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-md mb-6 text-sm">
+                    <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-md mb-6 text-sm">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
                         <input
                             type="text"
                             required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                             placeholder="John Doe"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
                         <input
                             type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                             placeholder="you@example.com"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
                         <input
                             type="password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 rounded-md focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                             placeholder="••••••••"
                             minLength={6}
                         />
@@ -114,9 +114,9 @@ export default function Register() {
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-600">
+                <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
                     Already have an account?{" "}
-                    <Link href="/login" className="text-emerald-700 hover:text-emerald-600 font-medium">
+                    <Link href="/login" className="text-emerald-700 dark:text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium">
                         Sign in here
                     </Link>
                 </p>
