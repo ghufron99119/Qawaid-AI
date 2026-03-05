@@ -211,11 +211,11 @@ Tambahkan di `.env.local`:
 GEMINI_API_KEY=AIzaSyBVrh06bbrgL9p7VuhQcg5pFE1JL1FSMeQ
 
 # OpenRouter (jika pakai)
-OPENROUTER_API_KEY=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
+OPENROUTER_API_KEY=your key
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 
 # Groq
-GROQ_API_KEY=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
+GROQ_API_KEY=your key
 GROQ_BASE_URL=https://api.groq.com/openai/v1
 ```
 
