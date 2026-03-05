@@ -1,0 +1,39 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  password_hash String
+  created_at    DateTime  @default(now())
+  
+  texts         Text[]
+  quizzes       Quiz[]
+}
+
+model Text {
+  id              String   @id @default(uuid())
+  userId          String
+  arabic_text     String   @db.Text
+  analysis_result String   @db.Text // JSON string
+  created_at      DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Quiz {
+  id             String   @id @default(uuid())
+  userId         String
+  question       String   @db.Text
+  correct_answer String   @db.Text
+  created_at     DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
