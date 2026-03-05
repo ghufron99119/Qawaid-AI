@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -21,8 +21,8 @@ model User {
 model Text {
   id              String   @id @default(uuid())
   userId          String
-  arabic_text     String   @db.Text
-  analysis_result String   @db.Text // JSON string
+  arabic_text     String
+  analysis_result String   // JSON string
   created_at      DateTime @default(now())
 
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -31,8 +31,8 @@ model Text {
 model Quiz {
   id             String   @id @default(uuid())
   userId         String
-  question       String   @db.Text
-  correct_answer String   @db.Text
+  question       String
+  correct_answer String
   created_at     DateTime @default(now())
 
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
