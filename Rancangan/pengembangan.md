@@ -208,7 +208,7 @@ function analyzeWithFallback(text: string): Promise<Analysis> {
 Tambahkan di `.env.local`:
 ```env
 # Gemini
-GEMINI_API_KEY=AIzaSyBVrh06bbrgL9p7VuhQcg5pFE1JL1FSMeQ
+GEMINI_API_KEY=your key
 
 # OpenRouter (jika pakai)
 OPENROUTER_API_KEY=your key
