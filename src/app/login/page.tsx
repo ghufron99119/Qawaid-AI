@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -11,6 +11,13 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("savedEmail");
+        if (savedEmail) {
+            setEmail(savedEmail);
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,6 +34,7 @@ export default function Login() {
             if (res?.error) {
                 setError("Invalid email or password");
             } else {
+                localStorage.setItem("savedEmail", email);
                 router.push("/dashboard");
                 router.refresh();
             }
