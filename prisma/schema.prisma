@@ -8,32 +8,34 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String?
-  email         String    @unique
+  email         String       @unique
   password_hash String
-  created_at    DateTime  @default(now())
-  
+  created_at    DateTime     @default(now())
+
   notes         Note[]
-  quizzes       Quiz[]
+  quizResults   QuizResult[]
 }
 
 model Note {
-  id              String   @id @default(uuid())
-  userId          String
-  arabic_text     String
-  analysisJson    Json
-  created_at      DateTime @default(now())
+  id           String   @id @default(uuid())
+  userId       String
+  arabic_text  String
+  analysisJson Json
+  created_at   DateTime @default(now())
 
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Quiz {
-  id             String   @id @default(uuid())
+model QuizResult {
+  id             String   @id @default(cuid())
   userId         String
-  question       String
-  correct_answer String
-  created_at     DateTime @default(now())
+  score          Int
+  totalQuestions Int
+  createdAt      DateTime @default(now())
 
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

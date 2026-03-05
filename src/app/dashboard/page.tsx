@@ -23,7 +23,7 @@ export default async function DashboardPage() {
             _count: {
                 select: {
                     notes: true,
-                    quizzes: true,
+                    quizResults: true,
                 },
             },
         },
@@ -40,10 +40,21 @@ export default async function DashboardPage() {
         take: 5,
     });
 
-    // Calculate stats (Mocking average quiz score for now since it's not fully implemented)
+    // Calculate real quiz stats
     const totalNotes = user._count.notes;
-    const totalQuizzes = user._count.quizzes;
-    const averageScore = totalQuizzes > 0 ? "85%" : "0%"; // Placeholder
+    const totalQuizzes = user._count.quizResults;
+
+    // Aggregate quiz results for average score
+    let averageScore = "0%";
+    if (totalQuizzes > 0) {
+        const quizStats = await prisma.quizResult.findMany({
+            where: { userId: user.id },
+            select: { score: true, totalQuestions: true },
+        });
+        const avgPct =
+            quizStats.reduce((sum, r) => sum + r.score / r.totalQuestions, 0) / quizStats.length;
+        averageScore = `${Math.round(avgPct * 100)}%`;
+    }
 
     return (
         <div className="w-full max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -82,7 +93,7 @@ export default async function DashboardPage() {
                         <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
                             <CheckCircle className="w-5 h-5" />
                         </div>
-                        <h3 className="font-medium text-slate-700 dark:text-slate-300">Quizzes Taken</h3>
+                        <h3 className="font-medium text-slate-700 dark:text-slate-300">Kuis Diselesaikan</h3>
                     </div>
                     <p className="text-4xl font-bold text-slate-900 dark:text-white mt-auto">{totalQuizzes}</p>
                 </div>

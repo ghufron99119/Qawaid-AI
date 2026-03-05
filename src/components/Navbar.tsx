@@ -36,6 +36,15 @@ export default function Navbar() {
                                 >
                                     Analyze
                                 </Link>
+                                <Link
+                                    href="/quiz"
+                                    className={`${pathname === "/quiz"
+                                        ? "border-emerald-300 text-white"
+                                        : "border-transparent text-emerald-100 hover:border-emerald-300 hover:text-white"
+                                        } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                                >
+                                    Kuis
+                                </Link>
                             </div>
                         )}
                     </div>
