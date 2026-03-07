@@ -3,6 +3,7 @@ import { analyzeWithFallback } from '@/lib/ai/router';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { isArabic } from '@/lib/arabic/detector';
 
 export async function POST(req: Request) {
     try {
@@ -21,6 +22,12 @@ export async function POST(req: Request) {
         const cleanText = text.trim();
         if (cleanText.length === 0) {
             return NextResponse.json({ error: 'Text cannot be empty' }, { status: 400 });
+        }
+
+        if (!isArabic(cleanText)) {
+            return NextResponse.json({ 
+                error: 'Mohon masukkan teks dalam bahasa Arab saja. (Please provide Arabic text only.)' 
+            }, { status: 400 });
         }
 
         if (cleanText.length > 500) {

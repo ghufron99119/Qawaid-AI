@@ -1,6 +1,9 @@
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 
 export async function ollamaGenerate(model: string, prompt: string) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minutes timeout
+
   try {
     const res = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: "POST",
@@ -9,7 +12,8 @@ export async function ollamaGenerate(model: string, prompt: string) {
         model,
         prompt,
         stream: false
-      })
+      }),
+      signal: controller.signal
     });
 
     if (!res.ok) {
@@ -26,7 +30,12 @@ export async function ollamaGenerate(model: string, prompt: string) {
 
     return data.response;
   } catch (error) {
+    if ((error as any).name === 'AbortError') {
+      throw new Error("Ollama request timed out after 10 minutes");
+    }
     console.error("[Ollama Provider] Error:", error);
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
