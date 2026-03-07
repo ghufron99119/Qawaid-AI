@@ -69,32 +69,32 @@ export default async function NoteDetailPage({ params }: { params: Promise<{ id:
 
                 <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 mb-8">
                     <h2 className="text-sm font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">Original Text</h2>
-                    <p className="font-arabic text-3xl leading-relaxed text-slate-900 dark:text-white text-right" dir="rtl">
+                    <p className="font-amiri text-4xl leading-loose text-slate-900 dark:text-white text-right" dir="rtl">
                         {note.arabic_text}
                     </p>
                 </div>
 
                 <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
-                    <table className="w-full text-right text-sm text-slate-700 dark:text-slate-300 font-arabic">
+                    <table className="w-full text-right text-sm text-slate-700 dark:text-slate-300 font-ibm-arabic">
                         <thead className="bg-slate-50 dark:bg-slate-800/80 text-emerald-800 dark:text-emerald-400 font-bold border-b border-slate-200 dark:border-slate-700">
-                            <tr>
-                                <th scope="col" className="px-6 py-4">Word</th>
-                                <th scope="col" className="px-6 py-4">Type</th>
-                                <th scope="col" className="px-6 py-4">I'rab</th>
-                                <th scope="col" className="px-6 py-4 text-left font-sans">Explanation</th>
+                            <tr className="text-lg">
+                                <th scope="col" className="px-6 py-5">Word</th>
+                                <th scope="col" className="px-6 py-5">Type</th>
+                                <th scope="col" className="px-6 py-5">I'rab</th>
+                                <th scope="col" className="px-6 py-5 text-left font-sans">Explanation</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                             {results.map((item, index) => (
                                 <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                    <td className="px-6 py-4 font-bold text-lg text-slate-900 dark:text-white">{item.word}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+                                    <td className="px-6 py-5 font-bold text-2xl text-emerald-700 dark:text-emerald-400 leading-relaxed">{item.word}</td>
+                                    <td className="px-6 py-5 whitespace-nowrap">
+                                        <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 text-emerald-800 dark:text-emerald-300 font-sans">
                                             {item.type}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4">{item.i3rab}</td>
-                                    <td className="px-6 py-4 text-left text-slate-500 dark:text-slate-400 font-sans">{item.explanation || "-"}</td>
+                                    <td className="px-6 py-5 text-xl leading-relaxed">{item.i3rab}</td>
+                                    <td className="px-6 py-5 text-left text-slate-500 dark:text-slate-400 font-sans text-base">{item.explanation || "-"}</td>
                                 </tr>
                             ))}
                         </tbody>

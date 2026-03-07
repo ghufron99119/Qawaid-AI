@@ -149,7 +149,7 @@ export default async function DashboardPage() {
                                     <li key={note.id} className="p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                             <div className="flex-1">
-                                                <p className="font-arabic text-xl text-slate-900 dark:text-white mb-2" dir="rtl">
+                                                <p className="font-ibm-arabic text-2xl text-slate-900 dark:text-white mb-2 leading-loose" dir="rtl">
                                                     {note.arabic_text}
                                                 </p>
                                                 <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">

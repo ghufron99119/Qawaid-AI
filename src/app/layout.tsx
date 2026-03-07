@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Naskh_Arabic, Inter } from "next/font/google";
+import { Noto_Naskh_Arabic, Inter, IBM_Plex_Sans_Arabic, Amiri } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
@@ -10,9 +10,21 @@ const inter = Inter({
 });
 
 const notoArabic = Noto_Naskh_Arabic({
-  variable: "--font-arabic",
+  variable: "--font-noto-arabic",
   subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
+});
+
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
+  variable: "--font-ibm-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+});
+
+const amiri = Amiri({
+  variable: "--font-amiri",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${notoArabic.variable} antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col font-sans`}
+        className={`${inter.variable} ${notoArabic.variable} ${ibmPlexArabic.variable} ${amiri.variable} antialiased bg-gray-50 text-gray-900 min-h-screen flex flex-col font-sans`}
       >
         <AuthProvider>
           <Navbar />

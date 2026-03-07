@@ -16,7 +16,7 @@ export default function LandingPage() {
           <span className="text-emerald-600">Powered by AI</span>
         </h1>
 
-        <p className="max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed font-arabic animate-slide-up" style={{ animationDelay: "150ms" }}>
+        <p className="max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed font-ibm-arabic animate-slide-up" style={{ animationDelay: "150ms" }}>
           Qawaid-AI is an intelligent companion that helps you understand Nahwu and Sharaf with instant text analysis, smart feedback, and interactive exercises.
         </p>
 

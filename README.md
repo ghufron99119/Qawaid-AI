@@ -7,11 +7,12 @@ Qawaid AI adalah platform edukasi interaktif berbasis kecerdasan buatan (AI) yan
 
 ## 🚀 Fitur Utama
 
-1. **Autentikasi Pengguna Aman & UX Modern**
-   - Sistem Login dan Registrasi menggunakan `NextAuth.js`.
-   - **Validasi Skema (Zod)**: Validasi formulir di sisi klien memastikan integritas data (format email, minimal karakter password) sebelum dikirim ke server.
-   - **Fitur "Remember Me"**: Opsi bagi pengguna untuk menyimpan email di `localStorage` secara aman guna mempercepat proses login berikutnya.
-   - **Eye Visibility Toggle**: Fitur lihat/sembunyi kata sandi untuk mengurangi kesalahan pendaftaran.
+1. **Autentikasi Pengguna Multi-Provider & Recovery**
+   - **Multi-Login**: Mendukung login tradisional (Email/Password) dan **Google OAuth 2.0**.
+   - **Pemulihan Akun (Forgot Password)**: Sistem reset password aman menggunakan token UUID dengan masa berlaku 1 jam dan pengiriman email otomatis.
+   - **Validasi Skema (Zod)**: Validasi formulir di sisi klien dan server memastikan integritas data (format email, minimal karakter password).
+   - **Fitur "Remember Me"**: Opsi bagi pengguna untuk menyimpan email di `localStorage` guna mempermudah login berikutnya.
+   - **Eye Visibility Toggle**: Fitur lihat/sembunyi kata sandi di semua form autentikasi.
    - Perlindungan password optimal menggunakan hashing `bcryptjs`.
 
 2. **Analisis Teks Arab Cerdas (I'rab Analysis) - _Dalam Pengembangan_**
@@ -44,8 +45,9 @@ Proyek ini dibangun menggunakan arsitektur modern dengan performa tinggi:
 - **Validasi Data:** [Zod](https://zod.dev/)
 - **Ikonografi:** [Lucide React](https://lucide.dev/)
 - **ORM:** [Prisma](https://www.prisma.io/)
-- **Database:** PostgreSQL
+- **Database:** PostgreSQL (Neon)
 - **Autentikasi:** [NextAuth.js](https://next-auth.js.org/)
+- **Email Service:** [Resend](https://resend.com/)
 - **AI Engine:** Google Gemini AI API (Generative AI)
 ---
 
@@ -89,6 +91,13 @@ NEXTAUTH_URL="http://localhost:3000"
 
 # Kunci API Google Gemini untuk fungsionalitas Analisis Teks & Kuis
 LLM_API_KEY="masukkan_api_key_gemini_anda_disini"
+
+# Google OAuth (Dapatkan dari Google Cloud Console)
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+
+# Resend Email (Untuk fitur Reset Password)
+RESEND_API_KEY="re_your_resend_api_key"
 ```
 
 ### 4. Setup Database
@@ -113,8 +122,9 @@ Aplikasi akan langsung menampilkan *Landing Page*.
 
 Aplikasi ini menggunakan tiga entitas data utama:
 - `User`: Menyimpan identitas pengguna (`id`, `name`, `email`, `password_hash`).
+- `PasswordResetToken`: Menyimpan token UUID dan waktu kedaluwarsa untuk pemulihan akun.
 - `Text`: Menyimpan riwayat teks Arab yang diuji/dianalisis. Ditautkan ke model *User* lewat parameter `userId`. Menyimpan balasan JSON dari LLM API.
-- `Quiz`: Menyimpan rekap kuis.
+- `QuizResult`: Menyimpan rekap hasil kuis pengguna.
 
 ---
 

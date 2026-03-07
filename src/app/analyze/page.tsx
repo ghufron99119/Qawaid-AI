@@ -116,7 +116,7 @@ export default function AnalyzePage() {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="أدخل النص العربي هنا..."
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-arabic text-xl resize-y"
+                    className="w-full px-4 py-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-ibm-arabic text-3xl leading-[2] resize-y"
                 />
 
                 <div className="mt-6 flex justify-end">
@@ -162,26 +162,26 @@ export default function AnalyzePage() {
                     </div>
 
                     <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
-                        <table className="w-full text-right text-sm text-slate-700 dark:text-slate-300 font-arabic">
+                        <table className="w-full text-right text-sm text-slate-700 dark:text-slate-300 font-ibm-arabic">
                             <thead className="bg-slate-50 dark:bg-slate-800/80 text-emerald-800 dark:text-emerald-400 font-bold border-b border-slate-200 dark:border-slate-700">
-                                <tr>
-                                    <th scope="col" className="px-6 py-4">Word (الكلمة)</th>
-                                    <th scope="col" className="px-6 py-4">Type (النوع)</th>
-                                    <th scope="col" className="px-6 py-4">I'rab (الإعراب)</th>
-                                    <th scope="col" className="px-6 py-4 text-left">Notes (ملاحظات)</th>
+                                <tr className="text-lg">
+                                    <th scope="col" className="px-6 py-5">Word (الكلمة)</th>
+                                    <th scope="col" className="px-6 py-5">Type (النوع)</th>
+                                    <th scope="col" className="px-6 py-5">I'rab (الإعراب)</th>
+                                    <th scope="col" className="px-6 py-5 text-left font-sans">Notes (ملاحظات)</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                                 {results.map((item, index) => (
                                     <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                        <td className="px-6 py-4 font-bold text-lg text-slate-900 dark:text-white">{item.word}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+                                        <td className="px-6 py-5 font-bold text-2xl text-emerald-700 dark:text-emerald-400 leading-relaxed">{item.word}</td>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 font-sans">
                                                 {item.type}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">{item.i3rab}</td>
-                                        <td className="px-6 py-4 text-left text-slate-500 dark:text-slate-400 font-sans">{item.explanation || "-"}</td>
+                                        <td className="px-6 py-5 text-xl leading-relaxed">{item.i3rab}</td>
+                                        <td className="px-6 py-5 text-left text-slate-500 dark:text-slate-400 font-sans text-base">{item.explanation || "-"}</td>
                                     </tr>
                                 ))}
                             </tbody>

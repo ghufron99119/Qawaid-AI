@@ -75,7 +75,7 @@ export default function Login() {
         <div className="min-h-[80vh] flex items-center justify-center">
             <div className="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100 dark:border-slate-800">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl justify-center font-arabic font-bold text-emerald-800 dark:text-emerald-500 mb-2">تسجيل الدخول</h1>
+                    <h1 className="text-3xl justify-center font-ibm-arabic font-bold text-emerald-800 dark:text-emerald-500 mb-2">تسجيل الدخول</h1>
                     <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Welcome Back</h2>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">Sign in to your Qawaid AI account</p>
                 </div>

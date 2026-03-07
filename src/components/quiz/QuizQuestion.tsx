@@ -45,7 +45,7 @@ export default function QuizQuestionCard({
 
             {/* Question text */}
             <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
-                <p className="text-lg font-medium text-slate-900 dark:text-white leading-relaxed">
+                <p className="text-xl font-medium text-slate-900 dark:text-white leading-loose font-ibm-arabic">
                     ❓ {question.question}
                 </p>
             </div>
@@ -98,7 +98,7 @@ export default function QuizQuestionCard({
                             >
                                 {iconMap[variant]}
                             </span>
-                            <span className="font-medium">{option}</span>
+                            <span className="font-ibm-arabic text-xl leading-loose">{option}</span>
                         </button>
                     );
                 })}
