@@ -7,9 +7,12 @@ Qawaid AI adalah platform edukasi interaktif berbasis kecerdasan buatan (AI) yan
 
 ## 🚀 Fitur Utama
 
-1. **Autentikasi Pengguna Aman**
+1. **Autentikasi Pengguna Aman & UX Modern**
    - Sistem Login dan Registrasi menggunakan `NextAuth.js`.
-   - Menggunakan hashing `bcryptjs` untuk perlindungan password.
+   - **Validasi Skema (Zod)**: Validasi formulir di sisi klien memastikan integritas data (format email, minimal karakter password) sebelum dikirim ke server.
+   - **Fitur "Remember Me"**: Opsi bagi pengguna untuk menyimpan email di `localStorage` secara aman guna mempercepat proses login berikutnya.
+   - **Eye Visibility Toggle**: Fitur lihat/sembunyi kata sandi untuk mengurangi kesalahan pendaftaran.
+   - Perlindungan password optimal menggunakan hashing `bcryptjs`.
 
 2. **Analisis Teks Arab Cerdas (I'rab Analysis) - _Dalam Pengembangan_**
    - Mendukung input teks bahasa Arab (RTL support).
@@ -33,16 +36,17 @@ Qawaid AI adalah platform edukasi interaktif berbasis kecerdasan buatan (AI) yan
 
 ## 🛠 Teknologi yang Digunakan
 
-Proyek ini dibangun menggunakan arsitektur *Full-Stack* berkinerja tinggi:
+Proyek ini dibangun menggunakan arsitektur modern dengan performa tinggi:
 
-- **Frontend & Backend (Framework):** [Next.js 14+ (App Router)](https://nextjs.org/)
-- **Desain UI:** [Tailwind CSS](https://tailwindcss.com/) dengan palet warna Emerald dan Slate yang menenangkan bergaya Islami-modern.
+- **Framework:** [Next.js 16 (App Router)](https://nextjs.org/)
+- **Library UI:** [React 19](https://react.dev/)
+- **Desain UI:** [Tailwind CSS v4](https://tailwindcss.com/) dengan palet warna Emerald-Slate Islami-modern.
+- **Validasi Data:** [Zod](https://zod.dev/)
 - **Ikonografi:** [Lucide React](https://lucide.dev/)
-- **Manajemen Basis Data:** [Prisma ORM](https://www.prisma.io/)
-- **Database Utama:** PostgreSQL.
-- **Sistem Keamanan/Autentikasi:** [NextAuth.js (v4)](https://next-auth.js.org/)
-- **Kecerdasan Buatan:** Google Gemini API 
-
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Database:** PostgreSQL
+- **Autentikasi:** [NextAuth.js](https://next-auth.js.org/)
+- **AI Engine:** Google Gemini AI API (Generative AI)
 ---
 
 ## ⚙️ Persyaratan Sistem
