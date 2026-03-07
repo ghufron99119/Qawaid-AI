@@ -1,6 +1,9 @@
 import { analyzeWithGemini, generateQuizWithGemini } from './providers/gemini';
 import { analyzeWithOpenRouter, generateQuizWithOpenRouter } from './providers/openrouter';
 import { analyzeWithGroq, generateQuizWithGroq } from './providers/groq';
+import { ollamaGenerate } from './providers/ollama';
+import { LOCAL_MODELS, AITask } from './localModels';
+import { getPrompt, getQuizPrompt, getSystemPrompt } from './prompts';
 
 export type AnalysisItem = {
     word: string;
@@ -20,7 +23,33 @@ export type QuizQuestion = {
     correctAnswer: number; // 0-based index
 };
 
+/**
+ * Utility to clean AI response and parse JSON safely
+ */
+function cleanAndParseJson<T>(text: string): T {
+    try {
+        const cleanJson = text.replace(/```json\n?|\n?```/g, '').trim();
+        return JSON.parse(cleanJson);
+    } catch (error) {
+        console.error("[AI Router] JSON Parse Error. Raw content:", text);
+        throw new Error("Invalid format received from AI provider");
+    }
+}
+
 export async function analyzeWithFallback(text: string, contextNotes?: string[]): Promise<AnalysisResult> {
+    const providerSetting = process.env.AI_PROVIDER;
+
+    // Direct route to Ollama if configured
+    if (providerSetting === 'ollama') {
+        console.log(`[AI Router] Using Ollama (Local Model: ${LOCAL_MODELS.grammar}) for analysis...`);
+        const systemPrompt = getSystemPrompt();
+        const userPrompt = getPrompt(text, contextNotes);
+        const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
+        
+        const response = await ollamaGenerate(LOCAL_MODELS.grammar, combinedPrompt);
+        return cleanAndParseJson<AnalysisResult>(response);
+    }
+
     const providers = [
         { name: 'Gemini', fn: analyzeWithGemini },
         { name: 'OpenRouter', fn: analyzeWithOpenRouter },
@@ -37,7 +66,7 @@ export async function analyzeWithFallback(text: string, contextNotes?: string[])
 
             // Enhanced validation: check structure of each item
             if (Array.isArray(result) && result.length > 0) {
-                // ... logic check below ...
+                // ... validation logic ...
             } else if (typeof (result as any) === 'object' && result !== null) {
                 // Try to find an array property if the model wrapped it (e.g. { "analysis": [...] })
                 const foundArray = Object.values(result as any).find(val => Array.isArray(val) && (val as any[]).length > 0) as any[];
@@ -75,6 +104,21 @@ export async function analyzeWithFallback(text: string, contextNotes?: string[])
 }
 
 export async function generateQuizWithFallback(count: number, difficulty?: string, contextTexts?: string[]): Promise<QuizQuestion[]> {
+    const providerSetting = process.env.AI_PROVIDER;
+
+    // Direct route to Ollama if configured
+    if (providerSetting === 'ollama') {
+        const model = LOCAL_MODELS.reasoning || LOCAL_MODELS.general;
+        console.log(`[AI Router - Quiz] Using Ollama (Local Model: ${model}) for quiz generation...`);
+        const systemPrompt = getSystemPrompt();
+        const userPrompt = getQuizPrompt(count, difficulty, contextTexts);
+        const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
+
+        const response = await ollamaGenerate(model, combinedPrompt);
+        const result = cleanAndParseJson<QuizQuestion[]>(response);
+        return result.map((q, i) => ({ ...q, id: i + 1 }));
+    }
+
     const providers = [
         { name: 'Gemini', fn: generateQuizWithGemini },
         { name: 'OpenRouter', fn: generateQuizWithOpenRouter },
@@ -104,3 +148,4 @@ export async function generateQuizWithFallback(count: number, difficulty?: strin
 
     throw new Error(`All AI providers failed for quiz generation. Details: ${errors.join(' | ')}`);
 }
+

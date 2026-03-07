@@ -54,10 +54,16 @@
 ### 🔍 I'rab Analysis (Arabic Grammar)
 - Full **RTL** text input support
 - **Multi-provider AI** fallback: Gemini → OpenRouter → Groq
-- Automatic word-type highlighting:
-  - 🟢 Fi'il (Verb) · 🔵 Isim (Noun) · 🟡 Harf (Particle)
-- Detailed parsing: position, case endings, explanations
-- Save analysis results as personal notes
+- **Local Model Pool (Ollama)**: Use local models for development and research:
+  - `qwen2.5-coder` (Grammar Analysis)
+  - `glm-5:cloud` (Reasoning)
+  - `llama3.2` (General Tasks)
+
+### 🧪 AI Playground (Admin Only)
+- Interactive playground to test and compare different local models.
+- Manually switch between models in the Model Pool.
+- Real-time output visualization for prompt tuning and I'rab accuracy testing.
+
 
 </td>
 </tr>
@@ -133,6 +139,7 @@ graph TB
     end
 
     subgraph AI["🤖 AI Router (Multi-Provider)"]
+        LLM[Local Model Pool]
         GEM[Google Gemini]
         OR[OpenRouter]
         GRQ[Groq]
@@ -150,6 +157,7 @@ graph TB
 
     AA --> AI
     AQ --> AI
+    LLM -.->|fallback| GEM
     GEM -.->|fallback| OR
     OR -.->|fallback| GRQ
 
@@ -214,10 +222,19 @@ NEXTAUTH_URL="http://localhost:3000"
 GOOGLE_CLIENT_ID="your_google_client_id"
 GOOGLE_CLIENT_SECRET="your_google_client_secret"
 
-# ─── AI Engine (Multi-Provider) ──────────────────────────────────────────
-LLM_API_KEY="your_gemini_api_key"              # Primary
-OPENROUTER_API_KEY="your_openrouter_api_key"   # Fallback 1
-GROQ_API_KEY="your_groq_api_key"               # Fallback 2
+# ─── AI Engine (Mode) ───────────────────────────────────────────────────
+AI_PROVIDER="ollama"                           # "ollama" for local, "gemini" for cloud
+OLLAMA_URL="http://localhost:11434"
+
+# ─── Local Model Pool ────────────────────────────────────────────────────
+OLLAMA_MODEL_GRAMMAR="qwen2.5-coder:7b"
+OLLAMA_MODEL_REASONING="glm-5:cloud"
+OLLAMA_MODEL_GENERAL="llama3.2"
+
+# ─── Cloud AI API Keys (Fallback / Production) ──────────────────────────
+LLM_API_KEY="your_gemini_api_key"              # Primary Cloud
+OPENROUTER_API_KEY="your_openrouter_api_key"
+GROQ_API_KEY="your_groq_api_key"
 
 # ─── Resend (Email) ──────────────────────────────────────────────────────
 RESEND_API_KEY="re_your_resend_api_key"
@@ -283,6 +300,7 @@ erDiagram
 | `/notes` | 🔒 Protected | Browse saved notes |
 | `/notes/[id]` | 🔒 Protected | View note detail |
 | `/quiz` | 🔒 Protected | AI-powered interactive quiz |
+| `/admin/playground` | 🔒 Protected | AI Model Testing & Comparison |
 
 ---
 
@@ -325,6 +343,8 @@ QawaidAI/
 │   │   │   └── quiz/
 │   │   │       ├── generate/      # POST  — AI quiz generation
 │   │   │       └── submit/        # POST  — Submit quiz answers
+│   │   ├── admin/
+│   │   │   └── playground/        # Playground page
 │   │   ├── analyze/               # Analysis page
 │   │   ├── dashboard/             # Dashboard page
 │   │   ├── forgot-password/       # Forgot password page
@@ -352,7 +372,9 @@ QawaidAI/
 │   │   │   ├── providers/         # AI provider implementations
 │   │   │   │   ├── gemini.ts
 │   │   │   │   ├── groq.ts
+│   │   │   │   ├── ollama.ts
 │   │   │   │   └── openrouter.ts
+│   │   │   ├── localModels.ts     # Local model configuration
 │   │   │   ├── prompts.ts         # AI prompt templates
 │   │   │   └── router.ts          # Multi-provider fallback router
 │   │   ├── auth.ts                # NextAuth configuration
