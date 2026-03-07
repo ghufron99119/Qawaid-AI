@@ -7,7 +7,7 @@
 **Intelligent Arabic Grammar Companion**
 
 <p>
-  <em>AI-powered I'rab analysis · Smart notes · Interactive quizzes · Local model playground</em>
+  <em>Knowledge-grounded I'rab analysis · Pakar Engine (Vector-less RAG) · Interactive quizzes · Local AI playground</em>
 </p>
 
 <br/>
@@ -20,7 +20,7 @@
 [![Ollama](https://img.shields.io/badge/Ollama-Local_AI-ffffff?style=flat-square&logo=ollama&logoColor=black)](https://ollama.com/)
 [![License](https://img.shields.io/badge/License-MIT-10B981?style=flat-square)](LICENSE)
 
-[Getting Started](#-getting-started) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Architecture](#-architecture) · [Contributing](#-contributing)
+[Getting Started](#-getting-started) · [Features](#-features) · [AI Engine](#-ai-engine--pakar-engine) · [Tech Stack](#-tech-stack) · [Architecture](#-architecture)
 
 </div>
 
@@ -29,6 +29,7 @@
 ## 📑 Table of Contents
 
 - [Features](#-features)
+- [AI Engine — Pakar Engine](#-ai-engine--pakar-engine)
 - [Tech Stack](#-tech-stack)
 - [Architecture](#-architecture)
 - [Getting Started](#-getting-started)
@@ -58,13 +59,14 @@
 </td>
 <td width="50%" valign="top">
 
-### 🔍 I'rab Analysis
+### 🔍 I'rab Analysis (Knowledge-Grounded)
 - Full **RTL** Arabic text input support
-- Multi-provider AI fallback chain (Gemini → OpenRouter → Groq)
-- **Local Model Pool** via Ollama for offline development
+- **Arabic Language Detector** — Unicode regex guard clause
+- **Pakar Engine** with dynamic Kaidah retrieval
 - Automatic word-type highlighting:
   🟢 Fi'il · 🔵 Isim · 🟡 Harf
-- Detailed I'rab: position, case endings, CoT reasoning
+- Chain-of-Thought reasoning with confidence scores
+- Detailed I'rab: position, case endings, Ajurrumiyyah references
 - Save any analysis as a personal note
 
 </td>
@@ -76,7 +78,7 @@
 - Save & browse analyzed Arabic texts privately
 - Dedicated detail view per note
 - Owner-only access control
-- Personal annotations for study reference
+- **Analysis caching** — identical texts served instantly
 
 </td>
 <td width="50%" valign="top">
@@ -112,6 +114,56 @@
 
 <br/>
 
+## 🧬 AI Engine — Pakar Engine
+
+Qawaid AI uses a custom **Pakar Engine** ("Expert Engine") that transforms a generic LLM into a knowledge-grounded Nahwu scholar. Instead of relying on the model's pre-trained knowledge, the engine **injects verified rules and examples** from classical Arabic grammar references.
+
+```mermaid
+graph LR
+    Input["Arabic Text"] --> Detector["🛡️ Arabic<br/>Detector"]
+    Detector -->|Valid| Tokenizer["Tokenizer"]
+    Detector -->|Invalid| Reject["400 Error"]
+    Tokenizer --> TagDetector["Tag<br/>Detector"]
+    TagDetector --> KB["📚 Knowledge Base<br/>(9 Bab Nahwu)"]
+    TagDetector --> Examples["📝 Few-Shot<br/>(60 Contoh Shahih)"]
+    KB --> Prompt["🧠 Al-Mu'rib<br/>Prompt"]
+    Examples --> Prompt
+    Tokenizer --> Prompt
+    Prompt --> Router{"AI Router"}
+    Router --> Ollama["Ollama<br/>temp:0 | json"]
+    Router --> Cloud["Cloud Fallback<br/>(Gemini → Groq)"]
+```
+
+### How It Works
+
+| Step | Component | Description |
+|:---:|:---|:---|
+| 1 | **Arabic Detector** | Unicode regex validates input is Arabic before any AI call |
+| 2 | **Tokenizer** | Splits sentence into clean tokens, reducing model cognitive load |
+| 3 | **Tag Detector** | Identifies keywords (كَانَ, إِنَّ, بِ, لَنْ, etc.) to classify sentence structure |
+| 4 | **Knowledge Retrieval** | Selects relevant Nahwu chapters from 9-bab knowledge base (Ajurrumiyyah/Imrithi) |
+| 5 | **Few-Shot Selection** | Picks 3 most similar examples from 60 verified I'rab analyses using tag-overlap scoring |
+| 6 | **Prompt Assembly** | Combines: System Identity + Kaidah + Examples + Tokens + Schema |
+| 7 | **Zero Hallucination** | Ollama runs with `temperature: 0` and `format: "json"` for deterministic output |
+
+### Knowledge Base Coverage
+
+| Chapter | Topics | Examples |
+|:---|:---|:---:|
+| Kalam & Kalimah | Isim, Fi'il, Harf identification | 5 |
+| Tanda I'rab | Dhommah, Fathah, Kasrah, Sukun, Wawu, Alif, Ya', Nun | 8 |
+| Marfu'atul Asma' | Fa'il, Naibul Fa'il, Mubtada', Khobar | 12 |
+| Nawasikh | Kaana, Inna, Laisa, Laita, Dhonna | 5 |
+| Manshubatul Asma' | Maf'ul Bih, Hal, Tamyiz, Mustatsna, Munada | 17 |
+| Makhfudhatul Asma' | Huruf Jar, Idhafah (Lam, Min, Fi) | 3 |
+| At-Tawabi' | Na'at, Athaf, Taukid, Badal | 7 |
+| I'rab Fi'il Mudhari' | Rafa', Nashab, Jazm, Af'alul Khomsah | 10 |
+| I'rab Khusus | Ghairu Munsharif, Maqshur, Manqush | 5 |
+
+> **Total: 9 chapters · 60 verified examples · sourced from Matan Al-Ajurrumiyyah, Nadzom Al-Imrithi, Alfiyyah Ibnu Malik, & Syarah Ibnu Aqil.**
+
+<br/>
+
 ## 🛠 Tech Stack
 
 <table>
@@ -132,6 +184,7 @@
 <tr><td>Email</td><td><a href="https://resend.com/">Resend</a></td></tr>
 <tr><td>AI (Cloud)</td><td>Google Gemini · OpenRouter · Groq</td></tr>
 <tr><td>AI (Local)</td><td><a href="https://ollama.com/">Ollama</a> — qwen2.5-coder · glm-5 · llama3.2</td></tr>
+<tr><td>AI Toolkit</td><td><code>jsonrepair</code> · Arabic Tokenizer · Unicode Detector</td></tr>
 </table>
 
 <br/>
@@ -157,9 +210,16 @@ graph TB
         APG["/api/admin/playground"]
     end
 
+    subgraph Pakar["🧬 Pakar Engine"]
+        DET["Arabic Detector"]
+        TOK["Tokenizer"]
+        KBR["Knowledge Retrieval"]
+        FSE["Few-Shot Selector"]
+    end
+
     subgraph AI["🤖 AI Router"]
         direction TB
-        subgraph Local["Local (Ollama)"]
+        subgraph Local["Local (Ollama · temp:0)"]
             QW[qwen2.5-coder]
             GL[glm-5]
             LL[llama3.2]
@@ -169,6 +229,11 @@ graph TB
             OR[OpenRouter]
             GRQ[Groq]
         end
+    end
+
+    subgraph Knowledge["📚 Knowledge Base"]
+        NKB["9 Bab Nahwu"]
+        EXM["60 Contoh Shahih"]
     end
 
     subgraph Data["💾 Data Layer"]
@@ -182,13 +247,20 @@ graph TB
     Client --> AUTH
     PG_UI --> APG
 
-    AA --> AI
+    AA --> DET
+    DET --> TOK
+    TOK --> KBR
+    KBR --> FSE
+    KBR -.-> NKB
+    FSE -.-> EXM
+    FSE --> AI
+
     AQ --> AI
     APG --> Local
 
-    Local -.->|fallback| Cloud
-    GEM -.->|fallback| OR
-    OR -.->|fallback| GRQ
+    Local -.- |fallback| Cloud
+    GEM -.-|fallback| OR
+    OR -.-|fallback| GRQ
 
     API --> PR
     PR --> PGD
@@ -285,7 +357,7 @@ RESEND_API_KEY="re_your_resend_api_key"
 ```
 
 > [!NOTE]
-> **Development:** Set `AI_PROVIDER=ollama` — all requests route to your local models, no API keys needed.
+> **Development:** Set `AI_PROVIDER=ollama` — all requests route to your local models with `temperature: 0` and `format: "json"` for deterministic output. No API keys needed.
 > **Production:** Set `AI_PROVIDER=gemini` — requires at least `GEMINI_API_KEY`. Automatic fallback to OpenRouter → Groq.
 
 <br/>
@@ -373,8 +445,12 @@ flowchart LR
 
 ```
 QawaidAI/
+├── DatasetAI/
+│   ├── ContohSoal.md                 # 60 verified I'rab examples (source)
+│   ├── Qoidah.md                     # Ajurrumiyyah/Imrithi rules (source)
+│   └── rancangan.md                  # Pakar Engine design doc
 ├── prisma/
-│   └── schema.prisma                # Database schema definition
+│   └── schema.prisma                 # Database schema definition
 ├── public/                           # Static assets (SVGs, favicon)
 ├── src/
 │   ├── app/
@@ -410,12 +486,21 @@ QawaidAI/
 │   │   ├── ai/
 │   │   │   ├── providers/
 │   │   │   │   ├── gemini.ts         # Google Gemini provider
-│   │   │   │   ├── groq.ts           # Groq provider
-│   │   │   │   ├── ollama.ts         # Ollama local provider
+│   │   │   │   ├── groq.ts          # Groq provider
+│   │   │   │   ├── ollama.ts         # Ollama (temp:0, json mode)
 │   │   │   │   └── openrouter.ts     # OpenRouter provider
 │   │   │   ├── localModels.ts        # Task → model mapping
-│   │   │   ├── prompts.ts            # Prompt engineering (CoT)
-│   │   │   └── router.ts             # Multi-provider fallback router
+│   │   │   ├── pakar-engine.ts       # 🧬 Dynamic Knowledge Retrieval
+│   │   │   ├── prompts.ts            # Al-Mu'rib prompt engineering
+│   │   │   ├── router.ts             # Multi-provider fallback + jsonrepair
+│   │   │   └── schema.ts             # Strict JSON output schema
+│   │   ├── arabic/
+│   │   │   ├── detector.ts           # 🛡️ Arabic language validator
+│   │   │   ├── rules.ts              # Grammar hints for AI priming
+│   │   │   └── tokenize.ts           # Arabic text tokenizer
+│   │   ├── knowledge/
+│   │   │   ├── nahwu-kb.ts           # 📚 9-bab Nahwu knowledge base
+│   │   │   └── examples.ts           # 📝 60 shahih I'rab examples
 │   │   ├── auth.ts                   # NextAuth configuration
 │   │   ├── prisma.ts                 # Prisma client singleton
 │   │   └── tokens.ts                 # Token generation utilities

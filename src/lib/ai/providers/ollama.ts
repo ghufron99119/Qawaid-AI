@@ -11,7 +11,12 @@ export async function ollamaGenerate(model: string, prompt: string) {
       body: JSON.stringify({
         model,
         prompt,
-        stream: false
+        stream: false,
+        format: "json",       // Strict JSON output mode
+        options: {
+          temperature: 0,     // Deterministic / zero-creativity for factual accuracy
+          num_ctx: 4096,      // Context window size
+        }
       }),
       signal: controller.signal
     });
@@ -22,7 +27,7 @@ export async function ollamaGenerate(model: string, prompt: string) {
     }
 
     const data = await res.json();
-    
+
     // Check if the response is valid
     if (!data.response) {
       throw new Error("Ollama returned an empty response field");
