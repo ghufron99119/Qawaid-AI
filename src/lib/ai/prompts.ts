@@ -31,26 +31,16 @@ Contoh format output:
 KEMBALIKAN HANYA JSON ARRAY YANG VALID. Tidak ada teks pembuka, penutup, atau markdown.`;
 }
 
-export function getPrompt(text: string): string {
-  return `You are an expert in Arabic grammar (Nahwu). Analyze the following Arabic sentence and provide the output as a JSON array.
-
-Every object in the array MUST have the exact following fields:
-- "word": the word from the original text
-- "type": the type of the word (e.g., Isim, Fi'il, Harf)
-- "i3rab": the i'rab explanation in Arabic or transliteration (e.g., "faa'il marfu'", "maf'ul bihi mansub")
-- "explanation": a short explanation in Indonesian (optional)
-
-Example:
-Input: "ذهب الطالب إلى المدرسة"
-Output:
-[
-  {"word": "ذهب", "type": "Fi'il Madhi", "i3rab": "mabni 'alal fath", "explanation": "kata kerja lampau, dibangun atas fathah"},
-  {"word": "الطالب", "type": "Isim", "i3rab": "faa'il marfu'", "explanation": "subjek, tanda rafa'nya dhammah"},
-  {"word": "إلى", "type": "Harf Jar", "i3rab": "mabni", "explanation": "huruf jar"},
-  {"word": "المدرسة", "type": "Isim", "i3rab": "ism majrur", "explanation": "kata benda yang dijarkan, tanda jarnya kasrah"}
-]
-
-Now analyze this sentence: "${text}"
+export function getPrompt(text: string, level?: string): string {
+  // Role & Boundary: Senior Arabic linguistics expert, reject non-Arabic input.
+  const roleInstruction = "You are a senior expert in Arabic morphology and linguistics. Reject any input that is not Arabic text and respond with a brief apology in Indonesian.";
+  // CEFR level tuning
+  const levelInstruction = level ? `Provide explanations appropriate for CEFR level ${level}.` : "Provide explanations suitable for a general audience.";
+  // Chain-of-Thought prompt
+  const cotInstruction = "Think step-by-step (Chain-of-Thought) before producing the final JSON output.";
+  // Deep Morphology fields
+  const morphologyNote = "Include additional fields: \"root\" (the root Jidhr) and \"pattern\" (the morphological pattern Wazn) for each word when applicable.";
+  return `${roleInstruction}\n${levelInstruction}\n${cotInstruction}\n${morphologyNote}\n\nYou are an expert in Arabic grammar (Nahwu). Analyze the following Arabic sentence and provide the output as a JSON array.\n\nEvery object in the array MUST have the exact following fields:\n- \"word\": the word from the original text\n- \"type\": the type of the word (e.g., Isim, Fi'il, Harf)\n- \"i3rab\": the i'rab explanation in Arabic or transliteration (e.g., \"faa'il marfu'\", \"maf'ul bihi mansub\")\n- \"explanation\": a short explanation in Indonesian (optional)\n- \"root\": the root (Jidhr) of the word if applicable\n- \"pattern\": the morphological pattern (Wazn) of the word if applicable\n\nExample:\nInput: \"ذهب الطالب إلى المدرسة\"\nOutput:\n[\n  {\"word\": \"ذهب\", \"type\": \"Fi'il Madhi\", \"i3rab\": \"mabni 'alal fath\", \"explanation\": \"kata kerja lampau, dibangun atas fathah\", \"root\": \"ذ-ه-ب\", \"pattern\": \"فَعَلَ\"},\n  {\"word\": \"الطالب\", \"type\": \"Isim\", \"i3rab\": \"faa'il marfu'\", \"explanation\": \"subjek, tanda rafa'nya dhammah\", \"root\": \"ط-ل-ب\", \"pattern\": \"فَاعِل\"}\n]\n\nNow analyze this sentence: \"${text}\"
 
 RETURN ONLY A VALID JSON ARRAY. No introductory or concluding text, no markdown formatting.`;
 }
