@@ -1,60 +1,60 @@
-Qawaid-AI AI Architecture Improvement Strategy (V2.0)
+Strategi Peningkatan Arsitektur AI Qawaid-AI (V2.0)
 
-The development of the Qawaid-AI system is not just an effort to digitize grammar, but rather an artificial intelligence engineering project that requires a deep understanding of the morphosemantic structure of the Arabic language. Based on the latest research, here is a thorough design to optimize the system.
+Pengembangan sistem Qawaid-AI bukan sekedar upaya digitalisasi tata bahasa, melainkan proyek rekayasa kecerdasan buatan yang membutuhkan pemahaman mendalam tentang struktur morfosemantik bahasa Arab. Berdasarkan penelitian terbaru, berikut adalah desain menyeluruh untuk mengoptimalkan sistem.
 
-1. Hybrid Model Architecture and AI Orchestration
+1. Arsitektur Model Hibrid dan Orkestrasi AI
 
-Systems must adopt a multi-model approach to balance cost and quality:
+Sistem harus mengadopsi pendekatan multi-model untuk menyeimbangkan biaya dan kualitas:
 
-Parsing Layer (Llama 3.3 70B): Used for initial analysis, word part classification (POS tagging), and basic morphological feature extraction due to its high cost efficiency.
+Parsing Layer (Llama 3.3 70B): Digunakan untuk analisis awal, klasifikasi bagian kata (penandaan POS), dan ekstraksi fitur morfologi dasar karena efisiensi biayanya yang tinggi.
 
-Reasoning Layer (Gemini 2.5 Pro): Used for complex I'rab analysis, resolving ambiguities in classical texts, and providing in-depth pedagogical explanations.
+Lapisan Penalaran (Gemini 2.5 Pro): Digunakan untuk analisis I'rab yang kompleks, menyelesaikan ambiguitas dalam teks klasik, dan memberikan penjelasan pedagogis yang mendalam.
 
-Verification Layer (DeepSeek R1 or Claude 3.5 Haiku): Acts as a fact-checking agent (critique agent) that verifies the output of the Reasoning Layer to minimize hallucinations.
+Lapisan Verifikasi (DeepSeek R1 atau Claude 3.5 Haiku): Bertindak sebagai agen pengecekan fakta (agen kritik) yang memverifikasi keluaran Lapisan Penalaran untuk meminimalkan halusinasi.
 
-2. Prompt Engineering Architecture: Cognitive Reasoning
+2. Arsitektur Teknik Cepat: Penalaran Kognitif
 
-The effectiveness of Qawaid-AI depends largely on how instructions are given to the model:
+Efektivitas Qawaid-AI sangat bergantung pada bagaimana instruksi diberikan kepada model:
 
-Chain-of-Thought (CoT): Becomes the main foundation in ensuring the model does not immediately provide the final answer, but rather carries out a decomposition of the linguistic problem.
+Chain-of-Thought (CoT): Menjadi landasan utama untuk memastikan model tidak serta merta memberikan jawaban akhir, melainkan melakukan dekomposisi permasalahan kebahasaan.
 
-Step-Back Prompting: Useful to pull the model back to a more general concept before answering a specific question. Before analyzing a complex I'rab sentence, the model is asked to explain the general rules.
+Step-Back Prompting: Berguna untuk menarik model kembali ke konsep yang lebih umum sebelum menjawab pertanyaan spesifik. Sebelum menganalisis kalimat I'rab kompleks, model diminta menjelaskan kaidah umum.
 
-Chain-of-Verification (CoVe): Involves four main steps: generating an initial response, designing verification questions, independently answering verification questions, and finally revising the initial response.
+Chain-of-Verification (CoVe): Melibatkan empat langkah utama: menghasilkan respons awal, merancang pertanyaan verifikasi, menjawab pertanyaan verifikasi secara mandiri, dan terakhir merevisi respons awal.
 
-3. Hallucination Mitigation and Boundary Setting
+3. Mitigasi Halusinasi dan Penetapan Batas
 
-To overcome the problem of AI answering outside the Arabic context:
+Untuk mengatasi masalah jawaban AI di luar konteks Arab:
 
-Boundary Setting: Determining what can and cannot be done. Explicit instructions to "admit if you don't know" (uncertainty-based abstention).
+Penetapan Batas: Menentukan apa yang boleh dan tidak boleh dilakukan. Instruksi eksplisit untuk “mengakui jika Anda tidak tahu” (abstensi berdasarkan ketidakpastian).
 
-Role Setting: Establishing the identity of the linguistic expert. Qawaid-AI should be instructed to act as a “Senior Arabic Linguistics Expert specializing in Sibawayh methodology”.
+Penetapan Peran: Menetapkan identitas ahli linguistik. Qawaid-AI harus diinstruksikan untuk bertindak sebagai “Pakar Senior Linguistik Arab yang berspesialisasi dalam metodologi Sibawayh”.
 
-Prompt Relevance Validation: Using a model such as SBERT that has been fine-tuned can achieve up to 98% accuracy in detecting whether the user's answer corresponds to the instructions.
+Validasi Relevansi Cepat: Menggunakan model seperti SBERT yang telah disempurnakan dapat mencapai akurasi hingga 98% dalam mendeteksi apakah jawaban pengguna sesuai dengan instruksi.
 
-4. Implementation of RAG (Retrieval-Augmented Generation)
+4. Implementasi RAG (Retrieval-Augmented Generation)
 
-The system should not rely solely on the model's internal memory:
+Sistem tidak boleh hanya mengandalkan memori internal model:
 
-Dynamic Context Injection: When the user enters a sentence, the system looks for similar rules from the database and injects them into the prompt as additional context.
+Injeksi Konteks Dinamis: Saat pengguna memasukkan kalimat, sistem mencari aturan serupa dari database dan memasukkannya ke dalam prompt sebagai konteks tambahan.
 
-Authoritative Corpus: Data synchronization using AWS OpenSearch or Pinecone to store embeddings from classical grammar books and the Koran corpus.
+Corpus Resmi: Sinkronisasi data menggunakan AWS OpenSearch atau Pinecone untuk menyimpan embeddings dari buku tata bahasa klasik dan korpus Alquran.
 
-5. Interface and Visual (UX) Optimization
+5. Optimasi Antarmuka dan Visual (UX).
 
-Response Streaming: Uses the Vercel AI SDK to provide instant visual feedback while the model is running (Typing Effect).
+Streaming Respons: Menggunakan Vercel AI SDK untuk memberikan umpan balik visual instan saat model berjalan (Efek Pengetikan).
 
-IBM Plex Sans Arabic: Use of a very modern, clean, and technical font to give a "High-Tech AI" feel.
+IBM Plex Sans Arab: Penggunaan font yang sangat modern, bersih, dan teknis untuk memberikan nuansa "AI Berteknologi Tinggi".
 
-ACTFL/CEFR Alignment: Qawaid-AI must be able to detect or accept user-level input to adjust the complexity of its explanations (A1-C1).
+Penyelarasan ACTFL/CEFR: Qawaid-AI harus mampu mendeteksi atau menerima masukan tingkat pengguna untuk menyesuaikan kompleksitas penjelasannya (A1-C1).
 
-6. Verification and Quality Assurance
+6. Verifikasi dan Penjaminan Mutu
 
-AraHalluEval Monitoring: Routinely tests the system with datasets known to be difficult to detect the emergence of new hallucinatory patterns.
+AraHalluEval Monitoring: Secara rutin menguji sistem dengan kumpulan data yang diketahui sulit mendeteksi munculnya pola halusinasi baru.
 
-Human-in-the-Loop: Provides a tool for expert users to provide corrections to AI analysis, the data of which can then be used for fine-tuning the model.
+Human-in-the-Loop: Menyediakan alat bagi pengguna ahli untuk memberikan koreksi terhadap analisis AI, yang datanya kemudian dapat digunakan untuk menyempurnakan model.
 
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
-create the latest version of the prompt for the AI system from Qawaid AI, which is prepared precisely by applying Role Settings, Boundary Settings, and Chain-of-Thought (CoT) according to the results of the digital philology research that you have presented.
+membuat prompt sistem AI versi terbaru dari Qawaid AI, yang disusun secara tepat dengan menerapkan Pengaturan Peran, Pengaturan Batas, dan Chain-of-Thought (CoT) sesuai dengan hasil penelitian filologi digital yang telah Anda sampaikan.

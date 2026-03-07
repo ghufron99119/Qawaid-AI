@@ -1,15 +1,19 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AnalysisResult, QuizQuestion } from '../router';
-import { getPrompt, getQuizPrompt } from '../prompts';
+import { getPrompt, getQuizPrompt, getSystemPrompt } from '../prompts';
 
-export async function analyzeWithGemini(text: string): Promise<AnalysisResult> {
+export async function analyzeWithGemini(text: string, contextNotes?: string[]): Promise<AnalysisResult> {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error("GEMINI_API_KEY is missing");
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    // Upgrade to gemini-2.5-pro for reasoning layer and provide system prompt
+    const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        systemInstruction: getSystemPrompt(),
+    });
 
-    const prompt = getPrompt(text);
+    const prompt = getPrompt(text, contextNotes);
 
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -29,7 +33,10 @@ export async function generateQuizWithGemini(count: number, difficulty?: string,
     if (!apiKey) throw new Error("GEMINI_API_KEY is missing");
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        systemInstruction: getSystemPrompt(),
+    });
 
     const prompt = getQuizPrompt(count, difficulty, contextTexts);
     const result = await model.generateContent(prompt);

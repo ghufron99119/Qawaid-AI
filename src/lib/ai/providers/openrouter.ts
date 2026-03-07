@@ -1,7 +1,7 @@
 import { AnalysisResult, QuizQuestion } from '../router';
-import { getPrompt, getQuizPrompt } from '../prompts';
+import { getPrompt, getQuizPrompt, getSystemPrompt } from '../prompts';
 
-export async function analyzeWithOpenRouter(text: string): Promise<AnalysisResult> {
+export async function analyzeWithOpenRouter(text: string, contextNotes?: string[]): Promise<AnalysisResult> {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) throw new Error("OPENROUTER_API_KEY is missing");
 
@@ -16,8 +16,11 @@ export async function analyzeWithOpenRouter(text: string): Promise<AnalysisResul
             "X-Title": "Qawaid AI",
         },
         body: JSON.stringify({
-            model: "google/gemini-2.5-flash",
-            messages: [{ role: "user", content: getPrompt(text) }],
+            model: "meta-llama/llama-3.1-70b-instruct",
+            messages: [
+                { role: "system", content: getSystemPrompt() },
+                { role: "user", content: getPrompt(text, contextNotes) }
+            ],
         })
     });
 
@@ -56,8 +59,11 @@ export async function generateQuizWithOpenRouter(count: number, difficulty?: str
             "X-Title": "Qawaid AI",
         },
         body: JSON.stringify({
-            model: "google/gemini-2.5-flash",
-            messages: [{ role: "user", content: getQuizPrompt(count, difficulty, contextTexts) }],
+            model: "meta-llama/llama-3.1-70b-instruct",
+            messages: [
+                { role: "system", content: getSystemPrompt() },
+                { role: "user", content: getQuizPrompt(count, difficulty, contextTexts) }
+            ],
         })
     });
 

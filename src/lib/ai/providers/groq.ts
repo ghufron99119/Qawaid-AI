@@ -1,7 +1,7 @@
 import { AnalysisResult, QuizQuestion } from '../router';
-import { getPrompt, getQuizPrompt } from '../prompts';
+import { getPrompt, getQuizPrompt, getSystemPrompt } from '../prompts';
 
-export async function analyzeWithGroq(text: string): Promise<AnalysisResult> {
+export async function analyzeWithGroq(text: string, contextNotes?: string[]): Promise<AnalysisResult> {
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) throw new Error("GROQ_API_KEY is missing");
 
@@ -15,7 +15,11 @@ export async function analyzeWithGroq(text: string): Promise<AnalysisResult> {
         },
         body: JSON.stringify({
             model: "llama-3.3-70b-versatile",
-            messages: [{ role: "user", content: getPrompt(text) }],
+            messages: [
+                { role: "system", content: getSystemPrompt() },
+                { role: "user", content: getPrompt(text, contextNotes) }
+            ],
+            response_format: { type: "json_object" },
         })
     });
 
@@ -53,7 +57,11 @@ export async function generateQuizWithGroq(count: number, difficulty?: string, c
         },
         body: JSON.stringify({
             model: "llama-3.3-70b-versatile",
-            messages: [{ role: "user", content: getQuizPrompt(count, difficulty, contextTexts) }],
+            messages: [
+                { role: "system", content: getSystemPrompt() },
+                { role: "user", content: getQuizPrompt(count, difficulty, contextTexts) }
+            ],
+            response_format: { type: "json_object" },
         })
     });
 

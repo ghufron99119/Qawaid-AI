@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, Calendar, Info } from "lucide-react";
 import { AnalysisItem } from "@/lib/ai/router";
 
 export const dynamic = "force-dynamic";
@@ -86,14 +86,42 @@ export default async function NoteDetailPage({ params }: { params: Promise<{ id:
                         </thead>
                         <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                             {results.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                    <td className="px-6 py-5 font-bold text-2xl text-emerald-700 dark:text-emerald-400 leading-relaxed">{item.word}</td>
+                                <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                                    <td className="px-6 py-5 font-bold text-2xl text-emerald-700 dark:text-emerald-400 leading-relaxed">
+                                        {item.word}
+                                        {item.confidence && (
+                                            <div className="mt-2 font-sans flex justify-end">
+                                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${
+                                                    item.confidence === 'high' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800' :
+                                                    item.confidence === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800' :
+                                                    'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800'
+                                                }`}>
+                                                    {item.confidence === 'high' ? 'High Confidence' : item.confidence === 'medium' ? 'Medium Confidence' : 'Low Confidence'}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="px-6 py-5 whitespace-nowrap">
                                         <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 text-emerald-800 dark:text-emerald-300 font-sans">
                                             {item.type}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-5 text-xl leading-relaxed">{item.i3rab}</td>
+                                    <td className="px-6 py-5 text-xl leading-relaxed">
+                                        <div className="flex items-start justify-end gap-2 group/tooltip relative">
+                                            {item.i3rab}
+                                            {item.reasoning && (
+                                                <div className="relative flex items-center">
+                                                    <Info className="w-4 h-4 text-slate-400 hover:text-emerald-500 cursor-help" />
+                                                    <div className="absolute right-0 bottom-full mb-2 hidden group-hover/tooltip:block w-64 p-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-sm font-sans rounded-lg shadow-xl z-10 border border-slate-700 dark:border-slate-300 pointer-events-none opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200">
+                                                        <p className="font-semibold mb-1 text-emerald-400 dark:text-emerald-700">AI Reasoning</p>
+                                                        <p className="leading-relaxed text-slate-300 dark:text-slate-700">{item.reasoning}</p>
+                                                        {/* Tooltip Arrow */}
+                                                        <div className="absolute -bottom-1 right-1 w-2 h-2 bg-slate-900 dark:bg-slate-100 border-r border-b border-slate-700 dark:border-slate-300 transform rotate-45"></div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </td>
                                     <td className="px-6 py-5 text-left text-slate-500 dark:text-slate-400 font-sans text-base">{item.explanation || "-"}</td>
                                 </tr>
                             ))}

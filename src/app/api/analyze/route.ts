@@ -57,8 +57,20 @@ export async function POST(req: Request) {
             });
         }
 
-        // Call AI Router
-        const analysis = await analyzeWithFallback(cleanText);
+        // Fetch recent notes for Dynamic Context Injection (RAG-Lite)
+        const recentNotes = await prisma.note.findMany({
+            where: { userId: user.id },
+            orderBy: { created_at: 'desc' },
+            take: 3,
+            select: { arabic_text: true, analysisJson: true },
+        });
+
+        const contextNotes = recentNotes.map(n => 
+            `Text: ${n.arabic_text}\nAnalysis: ${typeof n.analysisJson === 'string' ? n.analysisJson : JSON.stringify(n.analysisJson)}`
+        );
+
+        // Call AI Router with context (RAG-Lite)
+        const analysis = await analyzeWithFallback(cleanText, contextNotes.length > 0 ? contextNotes : undefined);
 
         return NextResponse.json({ success: true, data: analysis, cached: false });
     } catch (error) {
